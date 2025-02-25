@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react'
 import { assets } from '../../assets/assets'
 import axios from 'axios'
 import { AdminContext } from '../../context/AdminContext'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddDoctor = () => {
 
-  const [docImg, setDocImg] = useState('false')
+  const [docImg, setDocImg] = useState('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -26,7 +27,8 @@ const AddDoctor = () => {
      try{
 
       if(!docImg){
-        return toast.error('Image Not Selected')
+        toast.error('Image Not Selected')
+        return 
       }
       // const respone = await axios.post(`backendUrl + /api/admin/add-doctor` )
 
