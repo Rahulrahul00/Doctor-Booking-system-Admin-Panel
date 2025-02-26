@@ -3,7 +3,7 @@ import { assets } from '../../assets/assets'
 import axios from 'axios'
 import { AdminContext } from '../../context/AdminContext'
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 const AddDoctor = () => {
 
@@ -19,7 +19,7 @@ const AddDoctor = () => {
   const [address1, setAddress1] = useState('')
   const [address2, setAddress2] = useState('')
 
-  const {aToken, backenUrl} = useContext(AdminContext)
+  const {aToken, backendUrl} = useContext(AdminContext)
 
 
   const onSubmitHandler = async (e) => {
@@ -30,14 +30,50 @@ const AddDoctor = () => {
         toast.error('Image Not Selected')
         return 
       }
-      // const respone = await axios.post(`backendUrl + /api/admin/add-doctor` )
+      
+      const formData = new FormData() //Creates a new FormData object
+
+      //append for the all data
+      formData.append('image', docImg) // Adds a key-value pair
+      formData.append('name', name)
+      formData.append('email', email)
+      formData.append('password', password)
+      formData.append('experience', experience)
+      formData.append('fees', Number(fees))
+      formData.append('about', about)
+      formData.append('speciality', speciality)
+      formData.append('degree', degree)
+      formData.append('address',JSON.stringify({line1:address1, line2:address2}) )
+
+      //console log formData
+    formData.forEach((value,key)=>{
+        console.log(`${key} : ${value}`);
+    })
+
+    const {data} = await axios.post(backendUrl + '/api/admin/add-doctor', formData, {headers: {aToken} })
+
+    if (data.success){
+      toast.success(data.message)
+      setDocImg(false)
+      setName('')
+      setEmail('')
+      setPassword('')
+      setFees('')
+      setAbout('')
+      setDegree('')
+      setAddress1('')
+      setAddress2('')
+      
+    }else{
+      toast.error(data.message)
+    }
+      
 
      }catch(error){
       console.log(error)
      }
 
   }
-
 
   return (
     <form onSubmit={onSubmitHandler} className='m-5 w-full'>
@@ -69,7 +105,7 @@ const AddDoctor = () => {
             </div>
             <div className='flex-1 flex flex-col gap-1'>
               <p>Experience</p>
-              <select onChange={(e)=>setExperience(e.target.value)} value={experience} name="" id="">
+              <select  onChange={(e)=>setExperience(e.target.value)}  value={experience} className='border rounded px-3 py-2'  name="" id="">
                 <option value="1 Year">1 Year</option>
                 <option value="2 Year">2 Year</option>
                 <option value="3 Year">3 Year</option>
