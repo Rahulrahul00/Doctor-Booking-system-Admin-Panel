@@ -14,7 +14,7 @@ const Login = () => {
     const {setAToken,backendUrl} = useContext(AdminContext)
     const {setDToken} = useContext(DoctorContext)
 
-    console.log(backendUrl)
+    // console.log(backendUrl)
     
      const onSubmitHandler= async (e)=>{
         e.preventDefault()
